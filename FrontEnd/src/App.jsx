@@ -5,16 +5,20 @@ import FacultyPage from "./pages/FacultyPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import MessagePage from "./pages/MessagePage";
 import StudentPage from "./pages/StudentPage";
+import Login from "./login/Login"
+import GalleryPage from "./pages/GalleryPage";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<AdminPanel />} />
+        <Route path="/dashboard" element={<AdminPanel />} />
         <Route path="/faculty" element={<FacultyPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/messages" element={<MessagePage />} />
         <Route path="/students" element={<StudentPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );
