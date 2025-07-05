@@ -7,17 +7,18 @@ import MessagePage from "./pages/MessagePage";
 import StudentPage from "./pages/StudentPage";
 import Login from "./login/Login"
 import GalleryPage from "./pages/GalleryPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/dashboard" element={<AdminPanel />} />
-        <Route path="/faculty" element={<FacultyPage />} />
-        <Route path="/notifications" element={<NotificationsPage />} />
-        <Route path="/messages" element={<MessagePage />} />
-        <Route path="/students" element={<StudentPage />} />
-        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+        <Route path="/admin/faculty" element={<ProtectedRoute><FacultyPage /></ProtectedRoute>} />
+        <Route path="/admin/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+        <Route path="/admin/messages" element={<ProtectedRoute><MessagePage /></ProtectedRoute>} />
+        <Route path="/admin/students" element={<ProtectedRoute><StudentPage /></ProtectedRoute>} />
+        <Route path="/admin/gallery" element={<ProtectedRoute><GalleryPage /></ProtectedRoute>} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router>

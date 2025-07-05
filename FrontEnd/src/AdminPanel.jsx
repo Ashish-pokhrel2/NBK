@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import axios from "./api/axios";
+import { useNavigate } from 'react-router-dom';
 
 const AdminPanel = () => {
   const [counts, setCounts] = useState({
@@ -12,6 +13,7 @@ const AdminPanel = () => {
 
   // Also store notifications data to show recent notifications table dynamically
   const [notifications, setNotifications] = useState([]);
+  const navigate = useNavigate();
 
   const fetchCounts = async () => {
     try {
@@ -36,6 +38,10 @@ const AdminPanel = () => {
   };
 
   useEffect(() => {
+    // Redirect if not logged in as admin
+    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+      navigate('/login');
+    }
     fetchCounts();
   }, []);
 

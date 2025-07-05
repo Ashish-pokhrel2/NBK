@@ -30,6 +30,7 @@ app.use('/api/v1/gallery', require('./routes/galleryRoutes'));
 app.use('/api/v1/faculty', require('./routes/facultyRoutes'));
 app.use('/api/v1/messages', require('./routes/messagesRoutes'));
 app.use('/api/v1/notice', require('./routes/notificationRoutes'));
+app.use('/api/v1/admin', require('./routes/adminRoutes'));
 
 app.get('/', (req, res) => {
   res.status(200).send('Hello, World!');
