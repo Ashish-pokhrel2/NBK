@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../../api/axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../api/axios";
+import logo from "../../assets/imgs/logo.jpeg";
 
 function Login() {
-  const [userType, setUserType] = useState('student'); // 'student' or 'admin'
-  const [adminEmail, setAdminEmail] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
-  const [adminError, setAdminError] = useState('');
+  const [userType, setUserType] = useState("student"); // 'student' or 'admin'
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminError, setAdminError] = useState("");
   const [adminSuccess, setAdminSuccess] = useState(false);
   const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ function Login() {
         {/* Logo */}
         <div className="flex justify-center">
           <img
-            src="/logo.png" // Replace with your actual logo path
+            src={logo}
             alt="College Logo"
             className="h-16 w-16 object-contain"
           />
@@ -26,21 +27,21 @@ function Login() {
         <div className="flex justify-center space-x-4">
           <button
             className={`px-4 py-2 rounded-full font-semibold text-sm transition ${
-              userType === 'student'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700'
+              userType === "student"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
-            onClick={() => setUserType('student')}
+            onClick={() => setUserType("student")}
           >
             Student Login
           </button>
           <button
             className={`px-4 py-2 rounded-full font-semibold text-sm transition ${
-              userType === 'admin'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700'
+              userType === "admin"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
-            onClick={() => setUserType('admin')}
+            onClick={() => setUserType("admin")}
           >
             Admin Login
           </button>
@@ -48,64 +49,73 @@ function Login() {
 
         {/* Heading */}
         <h2 className="text-xl font-semibold text-center text-gray-800">
-          {userType === 'student' ? 'Student Login' : 'Admin Login'}
+          {userType === "student" ? "Student Login" : "Admin Login"}
         </h2>
 
         {/* Login Form */}
-        {userType === 'admin' ? (
+        {userType === "admin" ? (
           <form
-            onSubmit={async e => {
+            onSubmit={async (e) => {
               e.preventDefault();
               try {
-                const res = await axios.post('/admin/login', {
+                const res = await axios.post("/admin/login", {
                   email: adminEmail,
-                  password: adminPassword
+                  password: adminPassword,
                 });
-                if (res.data.success) {
+                if (res.data.success && res.data.token) {
                   setAdminSuccess(true);
-                  setAdminError('');
-                  localStorage.setItem('isAdminLoggedIn', 'true');
-                  setTimeout(() => navigate('/admin/dashboard'), 1000);
+                  setAdminError("");
+                  // Store JWT token in localStorage
+                  localStorage.setItem("token", res.data.token);
+                  setTimeout(() => navigate("/admin/dashboard"), 1000);
                 } else {
-                  setAdminError('Invalid admin credentials');
+                  setAdminError("Invalid admin credentials");
                   setAdminSuccess(false);
                 }
               } catch (error) {
-                console.error('Login error:', error);
-                setAdminError('Invalid admin credentials');
+                console.error("Login error:", error);
+                setAdminError("Invalid admin credentials");
                 setAdminSuccess(false);
               }
             }}
             className="space-y-4"
           >
             <div>
-              <label htmlFor="admin-email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="admin-email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email Address
               </label>
               <input
                 type="email"
                 id="admin-email"
                 name="email"
-                value={adminEmail}
-                onChange={e => setAdminEmail(e.target.value)}
+                value={adminEmail || ""}
+                onChange={(e) => setAdminEmail(e.target.value)}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
+
             <div>
-              <label htmlFor="admin-password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="admin-password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
                 type="password"
                 id="admin-password"
                 name="password"
-                value={adminPassword}
-                onChange={e => setAdminPassword(e.target.value)}
+                value={adminPassword || ""}
+                onChange={(e) => setAdminPassword(e.target.value)}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
+
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition duration-200"
@@ -116,17 +126,18 @@ function Login() {
               <div className="text-red-600 text-sm text-center">{adminError}</div>
             )}
             {adminSuccess && (
-              <div className="text-green-600 text-sm text-center">Login successful! Welcome, Admin.</div>
+              <div className="text-green-600 text-sm text-center">
+                Login successful! Welcome, Admin.
+              </div>
             )}
           </form>
         ) : (
-          <form
-            action="/login/student"
-            method="POST"
-            className="space-y-4"
-          >
+          <form action="/login/student" method="POST" className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Email Address
               </label>
               <input
@@ -138,7 +149,10 @@ function Login() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input

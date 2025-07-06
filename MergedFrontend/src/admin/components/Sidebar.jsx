@@ -24,7 +24,7 @@ function Sidebar() {
            <Link to="/admin/students" className="block p-2 rounded hover:bg-gray-200 ">
             Students
           </Link>
-          <Link to="#" className="block p-2 rounded hover:bg-gray-200 text-red-600">
+          <Link to="/logout" className="block p-2 rounded hover:bg-gray-200 text-red-600">
             Logout
           </Link>
 
