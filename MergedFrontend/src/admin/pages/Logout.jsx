@@ -6,7 +6,7 @@ export default function Logout() {
 
   useEffect(() => {
     localStorage.removeItem("token");            // ✅ important
-    localStorage.removeItem("isAdminLoggedIn");  // ✅ optional (cleanup)
+    // localStorage.removeItem("isAdminLoggedIn");  // ✅ optional (cleanup)
     navigate("/login");
   }, [navigate]);
 

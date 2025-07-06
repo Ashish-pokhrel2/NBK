@@ -19,7 +19,11 @@ const FacultyPage = () => {
   const fetchFaculty = async () => {
     try {
       const response = await axios.get("/faculty/list");
+      console.log(response);
+
       setFacultyList(response.data.data);
+
+
     } catch (error) {
       console.error("Failed to fetch faculty:", error);
     }

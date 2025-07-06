@@ -19,7 +19,7 @@ router.post('/login', (req, res) => {
     };
 
     // Sign token
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1m'});
 
     return res.json({ success: true, token, message: 'Admin login successful' });
   }

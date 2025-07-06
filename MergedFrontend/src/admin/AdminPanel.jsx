@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import axios from "../api/axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const AdminPanel = () => {
   const [counts, setCounts] = useState({
@@ -13,22 +13,23 @@ const AdminPanel = () => {
 
   // Also store notifications data to show recent notifications table dynamically
   const [notifications, setNotifications] = useState([]);
-  const navigate = useNavigate();
 
   const fetchCounts = async () => {
     try {
-      const [facultyRes, notificationsRes, messagesRes, studentsRes] = await Promise.all([
-        axios.get("/faculty/list"),
-        axios.get("/notice/list"),
-        axios.get("/messages/list"),
-        axios.get("/student/list"),
-      ]);
+      const [facultyRes, notificationsRes, messagesRes, studentsRes] =
+        await Promise.all([
+          axios.get("/faculty/list"),
+          axios.get("/notice/list"),
+          axios.get("/messages/list"),
+          axios.get("/student/list"),
+        ]);
 
       setCounts({
         totalFaculty: facultyRes.data.data?.length || 0,
         totalNotifications: notificationsRes.data.data?.length || 0,
         totalMessages: messagesRes.data.data?.length || 0,
-        totalStudents: studentsRes.data.totalStudents || studentsRes.data.data?.length || 0,
+        totalStudents:
+          studentsRes.data.totalStudents || studentsRes.data.data?.length || 0,
       });
 
       setNotifications(notificationsRes.data.data || []);
@@ -36,14 +37,9 @@ const AdminPanel = () => {
       console.error("Failed to fetch dashboard data:", error);
     }
   };
-
   useEffect(() => {
-    // Redirect if not logged in as admin
-    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
-      navigate('/login');
-    }
     fetchCounts();
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="bg-gray-100 min-h-screen flex">
@@ -55,19 +51,27 @@ const AdminPanel = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold">Total Faculty</h2>
-            <p className="text-2xl text-blue-600 font-bold">{counts.totalFaculty}</p>
+            <p className="text-2xl text-blue-600 font-bold">
+              {counts.totalFaculty}
+            </p>
           </div>
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold">Notifications</h2>
-            <p className="text-2xl text-green-600 font-bold">{counts.totalNotifications}</p>
+            <p className="text-2xl text-green-600 font-bold">
+              {counts.totalNotifications}
+            </p>
           </div>
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold">Messages</h2>
-            <p className="text-2xl text-yellow-600 font-bold">{counts.totalMessages}</p>
+            <p className="text-2xl text-yellow-600 font-bold">
+              {counts.totalMessages}
+            </p>
           </div>
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold">Students</h2>
-            <p className="text-2xl text-yellow-600 font-bold">{counts.totalStudents}</p>
+            <p className="text-2xl text-yellow-600 font-bold">
+              {counts.totalStudents}
+            </p>
           </div>
         </div>
 
