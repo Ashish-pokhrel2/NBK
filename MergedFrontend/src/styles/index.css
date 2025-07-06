@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@layer utilities {
+  .transform-gpu {
+    transform-style: preserve-3d;
+  }
+}
+
+/* Smooth hardware acceleration for better performance */
+* {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
