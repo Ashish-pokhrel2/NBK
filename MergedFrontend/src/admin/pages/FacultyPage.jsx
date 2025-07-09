@@ -202,3 +202,6 @@ const FacultyPage = () => {
 };
 
 export default FacultyPage;
+ 
+
+
