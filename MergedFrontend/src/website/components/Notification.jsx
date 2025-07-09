@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import Footer from './Footer';
 import Header from './Header';
+import axios from '../../api/axios';
 import { 
   Bell, 
   BellRing, 
@@ -20,78 +21,28 @@ import {
 } from 'lucide-react';
 
 const Notification = () => {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'info',
-      title: 'System Update Available',
-      message: 'A new system update is available for download. This update includes security patches and performance improvements.',
-      fullContent: 'A new system update (version 2.1.4) is available for download. This update includes important security patches, performance improvements, and new features. The update process will take approximately 15 minutes and requires a system restart. Please ensure all important work is saved before proceeding with the update.',
-      timestamp: '2 hours ago',
-      read: false,
-      attachment: {
-        name: 'update_notes_v2.1.4.pdf',
-        size: '2.4 MB',
-        type: 'pdf'
-      }
-    },
-    {
-      id: 2,
-      type: 'success',
-      title: 'Payment Processed Successfully',
-      message: 'Your payment of $299.99 has been processed successfully for your Pro subscription.',
-      fullContent: 'Your payment of $299.99 has been processed successfully for your Pro subscription. Your account has been upgraded and all premium features are now available. This payment will be automatically renewed on the 15th of next month unless you choose to cancel. You can manage your subscription settings in your account dashboard.',
-      timestamp: '1 day ago',
-      read: true,
-      attachment: {
-        name: 'payment_receipt_inv_001234.pdf',
-        size: '156 KB',
-        type: 'pdf'
-      }
-    },
-    {
-      id: 3,
-      type: 'warning',
-      title: 'Password Security Alert',
-      message: 'We detected a login attempt from a new device. Please verify if this was you.',
-      fullContent: 'We detected a login attempt from a new device (iPhone 15 Pro) at IP address 192.168.1.45 on January 15, 2025 at 3:24 PM EST. The login was from New York, NY. If this was you, no action is required. If you do not recognize this activity, please immediately change your password and enable two-factor authentication. You can review all recent login activity in your security settings.',
-      timestamp: '3 days ago',
-      read: false,
-      attachment: {
-        name: 'login_activity_report.csv',
-        size: '45 KB',
-        type: 'csv'
-      }
-    },
-    {
-      id: 4,
-      type: 'info',
-      title: 'New Feature: Dark Mode',
-      message: 'Dark mode is now available! Switch to dark mode in your settings for a better nighttime experience.',
-      fullContent: 'We are excited to announce that dark mode is now available across all our applications! You can now switch to dark mode in your user settings for a more comfortable viewing experience, especially during nighttime usage. Dark mode reduces eye strain and can help save battery life on OLED displays. The setting will sync across all your devices automatically.',
-      timestamp: '1 week ago',
-      read: true,
-      attachment: {
-        name: 'dark_mode_guide.pdf',
-        size: '1.8 MB',
-        type: 'pdf'
-      }
-    },
-    {
-      id: 5,
-      type: 'success',
-      title: 'Backup Completed',
-      message: 'Your data backup has been completed successfully. All files are securely stored.',
-      fullContent: 'Your scheduled data backup has been completed successfully. A total of 2.4 GB of data has been securely backed up to our encrypted cloud storage. This includes all your documents, settings, and preferences. The backup is encrypted with AES-256 encryption and can be restored at any time from your account dashboard. Your next automatic backup is scheduled for next Monday at 2:00 AM.',
-      timestamp: '2 weeks ago',
-      read: true,
-      attachment: {
-        name: 'backup_summary_jan_2025.zip',
-        size: '2.4 GB',
-        type: 'zip'
-      }
+  const [notifications, setNotifications] = useState([]);
+
+  // Fetching data from API 
+
+  const fetchNotifications = async () => {
+    try{
+      const res = await axios.get('/notice/list');
+      setNotifications(res.data.data);   // Storing the fetched data in state
     }
-  ]);
+
+
+    catch(error){
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  console.log(notifications);
+
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
