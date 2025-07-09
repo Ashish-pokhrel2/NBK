@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Search, Filter, Grid, List } from 'lucide-react';
 import Header from './Header';
 import ImageModal from './ImageModal';
+import axios from '../../api/axios';
+
 
 function Gallery() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -10,153 +12,173 @@ function Gallery() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [galleryList, setGalleryList] = useState([]);  // (Gallery response contains :  ImageID, Title and ImagePath)
+
+   const fetchGallery = async () => {
+    try {
+      const res = await axios.get("/gallery/list");
+      setGalleryList(res.data.data);
+    } catch (err) {
+      console.error("Failed to fetch gallery:", err);
+    }
+  };
+
+
+useEffect(() => {
+    fetchGallery();
+  }, []);
+
+
+
+
+
 
   const categories = ['all', 'nature', 'architecture', 'people', 'abstract', 'urban'];
 
-  const gridItems = [
-    { 
-      id: 1, 
-      type: 'large', 
-      url: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Mountain Landscape',
-      photographer: 'John Doe',
-      category: 'nature',
-      dimensions: '1920x1080',
-      size: '2.4 MB'
-    },
-    { 
-      id: 2, 
-      type: 'medium',
-      url: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'City Architecture',
-      photographer: 'Jane Smith',
-      category: 'architecture',
-      dimensions: '1920x1080',
-      size: '1.8 MB'
-    },
-    { 
-      id: 3, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Portrait Study',
-      photographer: 'Mike Johnson',
-      category: 'people',
-      dimensions: '1080x1350',
-      size: '1.2 MB'
-    },
-    { 
-      id: 4, 
-      type: 'tall',
-      url: 'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop',
-      title: 'Abstract Colors',
-      photographer: 'Sarah Wilson',
-      category: 'abstract',
-      dimensions: '1080x1920',
-      size: '2.1 MB'
-    },
-    { 
-      id: 5, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Ocean Waves',
-      photographer: 'David Brown',
-      category: 'nature',
-      dimensions: '1920x1080',
-      size: '3.2 MB'
-    },
-    { 
-      id: 6, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1308881/pexels-photo-1308881.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Urban Street',
-      photographer: 'Lisa Garcia',
-      category: 'urban',
-      dimensions: '1920x1080',
-      size: '1.9 MB'
-    },
-    { 
-      id: 7, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Forest Path',
-      photographer: 'Tom Anderson',
-      category: 'nature',
-      dimensions: '1920x1080',
-      size: '2.7 MB'
-    },
-    { 
-      id: 8, 
-      type: 'large',
-      url: 'https://images.pexels.com/photos/1486974/pexels-photo-1486974.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Modern Building',
-      photographer: 'Emma Davis',
-      category: 'architecture',
-      dimensions: '1920x1080',
-      size: '2.0 MB'
-    },
-    { 
-      id: 9, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1212487/pexels-photo-1212487.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Sunset Portrait',
-      photographer: 'Chris Lee',
-      category: 'people',
-      dimensions: '1080x1350',
-      size: '1.5 MB'
-    },
-    { 
-      id: 10, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Geometric Patterns',
-      photographer: 'Alex Turner',
-      category: 'abstract',
-      dimensions: '1920x1080',
-      size: '1.7 MB'
-    },
-    { 
-      id: 11, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'City Lights',
-      photographer: 'Maria Rodriguez',
-      category: 'urban',
-      dimensions: '1920x1080',
-      size: '2.3 MB'
-    },
-    { 
-      id: 12, 
-      type: 'tall',
-      url: 'https://images.pexels.com/photos/1761279/pexels-photo-1761279.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop',
-      title: 'Waterfall',
-      photographer: 'Kevin White',
-      category: 'nature',
-      dimensions: '1080x1920',
-      size: '3.5 MB'
-    },
-    { 
-      id: 13, 
-      type: 'small',
-      url: 'https://images.pexels.com/photos/1438761/pexels-photo-1438761.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Glass Reflection',
-      photographer: 'Nina Taylor',
-      category: 'architecture',
-      dimensions: '1920x1080',
-      size: '1.6 MB'
-    },
-    { 
-      id: 14, 
-      type: 'medium',
-      url: 'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-      title: 'Creative Portrait',
-      photographer: 'Ryan Clark',
-      category: 'people',
-      dimensions: '1920x1080',
-      size: '2.2 MB'
-    }
-  ];
+  // const gridItems = [
+  //   { 
+  //     id: 1, 
+  //     type: 'large', 
+  //     url: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Mountain Landscape',
+  //     photographer: 'John Doe',
+  //     category: 'nature',
+  //     dimensions: '1920x1080',
+  //     size: '2.4 MB'
+  //   },
+  //   { 
+  //     id: 2, 
+  //     type: 'medium',
+  //     url: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'City Architecture',
+  //     photographer: 'Jane Smith',
+  //     category: 'architecture',
+  //     dimensions: '1920x1080',
+  //     size: '1.8 MB'
+  //   },
+  //   { 
+  //     id: 3, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Portrait Study',
+  //     photographer: 'Mike Johnson',
+  //     category: 'people',
+  //     dimensions: '1080x1350',
+  //     size: '1.2 MB'
+  //   },
+  //   { 
+  //     id: 4, 
+  //     type: 'tall',
+  //     url: 'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop',
+  //     title: 'Abstract Colors',
+  //     photographer: 'Sarah Wilson',
+  //     category: 'abstract',
+  //     dimensions: '1080x1920',
+  //     size: '2.1 MB'
+  //   },
+  //   { 
+  //     id: 5, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Ocean Waves',
+  //     photographer: 'David Brown',
+  //     category: 'nature',
+  //     dimensions: '1920x1080',
+  //     size: '3.2 MB'
+  //   },
+  //   { 
+  //     id: 6, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1308881/pexels-photo-1308881.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Urban Street',
+  //     photographer: 'Lisa Garcia',
+  //     category: 'urban',
+  //     dimensions: '1920x1080',
+  //     size: '1.9 MB'
+  //   },
+  //   { 
+  //     id: 7, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Forest Path',
+  //     photographer: 'Tom Anderson',
+  //     category: 'nature',
+  //     dimensions: '1920x1080',
+  //     size: '2.7 MB'
+  //   },
+  //   { 
+  //     id: 8, 
+  //     type: 'large',
+  //     url: 'https://images.pexels.com/photos/1486974/pexels-photo-1486974.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Modern Building',
+  //     photographer: 'Emma Davis',
+  //     category: 'architecture',
+  //     dimensions: '1920x1080',
+  //     size: '2.0 MB'
+  //   },
+  //   { 
+  //     id: 9, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1212487/pexels-photo-1212487.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Sunset Portrait',
+  //     photographer: 'Chris Lee',
+  //     category: 'people',
+  //     dimensions: '1080x1350',
+  //     size: '1.5 MB'
+  //   },
+  //   { 
+  //     id: 10, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Geometric Patterns',
+  //     photographer: 'Alex Turner',
+  //     category: 'abstract',
+  //     dimensions: '1920x1080',
+  //     size: '1.7 MB'
+  //   },
+  //   { 
+  //     id: 11, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'City Lights',
+  //     photographer: 'Maria Rodriguez',
+  //     category: 'urban',
+  //     dimensions: '1920x1080',
+  //     size: '2.3 MB'
+  //   },
+  //   { 
+  //     id: 12, 
+  //     type: 'tall',
+  //     url: 'https://images.pexels.com/photos/1761279/pexels-photo-1761279.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop',
+  //     title: 'Waterfall',
+  //     photographer: 'Kevin White',
+  //     category: 'nature',
+  //     dimensions: '1080x1920',
+  //     size: '3.5 MB'
+  //   },
+  //   { 
+  //     id: 13, 
+  //     type: 'small',
+  //     url: 'https://images.pexels.com/photos/1438761/pexels-photo-1438761.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Glass Reflection',
+  //     photographer: 'Nina Taylor',
+  //     category: 'architecture',
+  //     dimensions: '1920x1080',
+  //     size: '1.6 MB'
+  //   },
+  //   { 
+  //     id: 14, 
+  //     type: 'medium',
+  //     url: 'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+  //     title: 'Creative Portrait',
+  //     photographer: 'Ryan Clark',
+  //     category: 'people',
+  //     dimensions: '1920x1080',
+  //     size: '2.2 MB'
+  //   }
+  // ];
 
-  const filteredItems = gridItems.filter(item => {
+  const filteredItems = galleryList.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.photographer.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
@@ -296,7 +318,7 @@ function Gallery() {
           
           {/* Grid Layout */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 auto-rows-[200px]">
-            {filteredItems.map((item, index) => (
+            {galleryList.map((item, index) => (
               <div
                 key={item.id}
                 className={`
@@ -315,7 +337,7 @@ function Gallery() {
                 }}
               >
                 <img 
-                  src={item.url} 
+                  src={`http://localhost:5000/uploads/${item.ImagePath}`} 
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -361,7 +383,7 @@ function Gallery() {
         totalImages={filteredItems.length}
       />
 
-      <style jsx>{`
+      <style>{`
         @keyframes fadeInUp {
           from {
             opacity: 0;

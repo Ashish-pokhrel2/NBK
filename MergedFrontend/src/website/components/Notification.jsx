@@ -41,7 +41,6 @@ const Notification = () => {
     fetchNotifications();
   }, []);
 
-  console.log(notifications);
 
 
   const [searchTerm, setSearchTerm] = useState('');
