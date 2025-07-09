@@ -20,6 +20,7 @@ import Gallery from "./website/components/Gallery";
 import Department from "./website/components/Department";
 import Contact from "./website/components/ContactUs";
 import About from "./website/components/AboutPage";
+import Notification from "./website/components/Notification";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/department" element={<Department />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
     </Router>
   );
