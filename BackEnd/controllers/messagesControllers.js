@@ -62,11 +62,17 @@ const getMessageById = async (req, res) => {
 // ================= CREATE MESSAGE =================
 const createMessage = async (req, res) => {
     try{
-        const {SenderID, SenderName, SenderEmail, Message, SenderNumber} = req.body;
-        if (!SenderID || !SenderName || !SenderEmail || !Message || !SenderNumber) {
+        let {SenderID, SenderName, SenderEmail, Message, SenderNumber} = req.body;
+        
+        // Auto-generate SenderID if not provided or if it's too large
+        if (!SenderID || SenderID.toString().length > 10) {
+            SenderID = Math.floor(Math.random() * 999999) + 100000; // 6-digit random number
+        }
+        
+        if (!SenderName || !SenderEmail || !Message || !SenderNumber) {
             return res.status(400).send({
                 success: false,
-                message: 'All fields are required'
+                message: 'SenderName, SenderEmail, Message, and SenderNumber are required'
             });
         }
 
@@ -74,7 +80,8 @@ const createMessage = async (req, res) => {
         res.status(201).send({
             success: true,
             message: 'Message created successfully',
-            messageID: data.insertId
+            messageID: data[0].insertId,
+            senderID: SenderID
         });
 
     }

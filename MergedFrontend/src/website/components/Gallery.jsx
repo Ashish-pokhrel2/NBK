@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Search, Filter, Grid, List } from 'lucide-react';
 import Header from './Header';
 import ImageModal from './ImageModal';
@@ -179,41 +179,74 @@ useEffect(() => {
   // ];
 
   const filteredItems = galleryList.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.photographer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
+    const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all'; // Since backend doesn't have categories yet
     return matchesSearch && matchesCategory;
   });
 
   const handleItemClick = (item) => {
-    setSelectedItem(item);
+    // Transform backend data to match ImageModal expectations
+    const transformedItem = {
+      id: item.ImageID,
+      url: `http://localhost:8000/uploads/${item.ImagePath}`,
+      title: item.title,
+      photographer: 'Unknown', // Default value since backend doesn't provide this
+      category: 'general', // Default value since backend doesn't provide this
+      dimensions: '1920x1080', // Default value since backend doesn't provide this
+      size: 'N/A' // Default value since backend doesn't provide this
+    };
+    setSelectedItem(transformedItem);
     setModalOpen(true);
   };
 
   const handleNext = () => {
-    const currentIndex = filteredItems.findIndex(item => item.id === selectedItem.id);
-    const nextIndex = (currentIndex + 1) % filteredItems.length;
-    setSelectedItem(filteredItems[nextIndex]);
+    const currentIndex = filteredItems.findIndex(item => item.ImageID === selectedItem.id);
+    if (currentIndex !== -1) {
+      const nextIndex = (currentIndex + 1) % filteredItems.length;
+      const nextItem = filteredItems[nextIndex];
+      const transformedItem = {
+        id: nextItem.ImageID,
+        url: `http://localhost:8000/uploads/${nextItem.ImagePath}`,
+        title: nextItem.title,
+        photographer: 'Unknown',
+        category: 'general',
+        dimensions: '1920x1080',
+        size: 'N/A'
+      };
+      setSelectedItem(transformedItem);
+    }
   };
 
   const handlePrevious = () => {
-    const currentIndex = filteredItems.findIndex(item => item.id === selectedItem.id);
-    const prevIndex = (currentIndex - 1 + filteredItems.length) % filteredItems.length;
-    setSelectedItem(filteredItems[prevIndex]);
+    const currentIndex = filteredItems.findIndex(item => item.ImageID === selectedItem.id);
+    if (currentIndex !== -1) {
+      const prevIndex = (currentIndex - 1 + filteredItems.length) % filteredItems.length;
+      const prevItem = filteredItems[prevIndex];
+      const transformedItem = {
+        id: prevItem.ImageID,
+        url: `http://localhost:8000/uploads/${prevItem.ImagePath}`,
+        title: prevItem.title,
+        photographer: 'Unknown',
+        category: 'general',
+        dimensions: '1920x1080',
+        size: 'N/A'
+      };
+      setSelectedItem(transformedItem);
+    }
   };
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % Math.ceil(filteredItems.length / 6));
-  };
+  }, [filteredItems.length]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev - 1 + Math.ceil(filteredItems.length / 6)) % Math.ceil(filteredItems.length / 6));
-  };
+  }, [filteredItems.length]);
 
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, [filteredItems.length]);
+  }, [nextSlide, filteredItems.length]);
 
   return (
     <>
@@ -250,7 +283,7 @@ useEffect(() => {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 cursor-pointer"
                 >
                   {categories.map(category => (
                     <option key={category} value={category}>
@@ -262,7 +295,7 @@ useEffect(() => {
                 <div className="flex bg-gray-100 rounded-xl p-1">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-lg transition-all duration-200 ${
+                    className={`p-2 rounded-lg transition-all duration-200 cursor-pointer ${
                       viewMode === 'grid' 
                         ? 'bg-white shadow-sm text-blue-600' 
                         : 'text-gray-600 hover:text-blue-600'
@@ -272,7 +305,7 @@ useEffect(() => {
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-lg transition-all duration-200 ${
+                    className={`p-2 rounded-lg transition-all duration-200 cursor-pointer ${
                       viewMode === 'list' 
                         ? 'bg-white shadow-sm text-blue-600' 
                         : 'text-gray-600 hover:text-blue-600'
@@ -295,7 +328,7 @@ useEffect(() => {
             <div className="flex justify-between items-center p-8 text-white">
               <button 
                 onClick={prevSlide}
-                className="p-3 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 backdrop-blur-sm transform hover:scale-105"
+                className="p-3 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 backdrop-blur-sm transform hover:scale-105 cursor-pointer"
               >
                 <ChevronLeft size={32} />
               </button>
@@ -309,7 +342,7 @@ useEffect(() => {
               
               <button 
                 onClick={nextSlide}
-                className="p-3 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 backdrop-blur-sm transform hover:scale-105"
+                className="p-3 rounded-full bg-white/20 hover:bg-white/30 transition-all duration-200 backdrop-blur-sm transform hover:scale-105 cursor-pointer"
               >
                 <ChevronRight size={32} />
               </button>
@@ -318,17 +351,14 @@ useEffect(() => {
           
           {/* Grid Layout */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 auto-rows-[200px]">
-            {galleryList.map((item, index) => (
+            {filteredItems.map((item, index) => (
               <div
-                key={item.id}
+                key={item.ImageID}
                 className={`
                   group relative cursor-pointer overflow-hidden rounded-xl shadow-lg
                   transition-all duration-300 hover:shadow-2xl hover:-translate-y-2
                   bg-gradient-to-br from-red-100 to-blue-100
-                  ${item.type === 'large' ? 'col-span-2 row-span-2' : ''}
-                  ${item.type === 'medium' ? 'col-span-2' : ''}
-                  ${item.type === 'tall' ? 'row-span-2' : ''}
-                  ${selectedItem?.id === item.id ? 'ring-4 ring-blue-500 ring-opacity-50' : ''}
+                  ${selectedItem?.id === item.ImageID ? 'ring-4 ring-blue-500 ring-opacity-50' : ''}
                 `}
                 onClick={() => handleItemClick(item)}
                 style={{
@@ -337,7 +367,7 @@ useEffect(() => {
                 }}
               >
                 <img 
-                  src={`http://localhost:5000/uploads/${item.ImagePath}`} 
+                  src={`http://localhost:8000/uploads/${item.ImagePath}`} 
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -346,12 +376,12 @@ useEffect(() => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                     <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
-                    <p className="text-sm text-gray-200">by {item.photographer}</p>
+                    <p className="text-sm text-gray-200">by Unknown</p>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-xs bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">
-                        {item.category}
+                        General
                       </span>
-                      <span className="text-xs text-gray-300">{item.dimensions}</span>
+                      <span className="text-xs text-gray-300">1920x1080</span>
                     </div>
                   </div>
                 </div>
@@ -379,7 +409,7 @@ useEffect(() => {
         onClose={() => setModalOpen(false)}
         onNext={handleNext}
         onPrevious={handlePrevious}
-        currentIndex={selectedItem ? filteredItems.findIndex(item => item.id === selectedItem.id) : 0}
+        currentIndex={selectedItem ? filteredItems.findIndex(item => item.ImageID === selectedItem.id) : 0}
         totalImages={filteredItems.length}
       />
 

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const multer = require('multer');
+const { authenticateStudent } = require('../middleware/auth');
 
 const {
   notification,
@@ -9,6 +10,8 @@ const {
   createNotification,
   updateNotification,
   deleteNotification,
+  markAsRead,
+  getNotificationsForStudent,
 } = require('../controllers/notificationControllers');
 
 // ✅ Multer storage config
@@ -25,10 +28,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // ✅ Notification Routes
-router.get('/list', notification);
+router.get('/list', notification); // Admin route - no auth needed
+router.get('/student-notifications', authenticateStudent, getNotificationsForStudent); // Student route - auth required
 router.get('/get/:id', getNotificationById);
 router.post('/create', upload.single('Attachment'), createNotification);
 router.put('/update/:id', upload.single('Attachment'), updateNotification);
+router.put('/mark-read/:id', authenticateStudent, markAsRead); // Student route - auth required
 router.delete('/delete/:id', deleteNotification);
 
 module.exports = router;

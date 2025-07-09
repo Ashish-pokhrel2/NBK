@@ -15,6 +15,7 @@ import {
   Linkedin,
   CheckCircle
 } from 'lucide-react';
+import axios from '../../api/axios';
 import '../../styles/ContactUs.css';
 import Header from './Header.jsx'; 
 import Footer from './Footer.jsx'; 
@@ -23,10 +24,12 @@ const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,19 +39,41 @@ const ContactUs = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate form submission
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-    }, 3000);
+    setIsSubmitting(true);
+    
+    try {
+      // Generate a unique sender ID (using smaller number to avoid database overflow)
+      const senderID = Math.floor(Math.random() * 999999) + 100000; // 6-digit random number
+      
+      const messageData = {
+        SenderID: senderID,
+        SenderName: formData.name,
+        SenderEmail: formData.email,
+        SenderNumber: formData.phone,
+        Message: `Subject: ${formData.subject}\n\nMessage: ${formData.message}`
+      };
+      
+      await axios.post('/messages/create', messageData);
+      
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      }, 3000);
+    } catch (error) {
+      console.error('Error submitting message:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -209,21 +234,39 @@ const ContactUs = () => {
                   </div>
                 </div>
                 
-                <div className="form-group">
-                  <label htmlFor="subject" className="form-label">
-                    <Building size={16} />
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    className="form-input"
-                    placeholder="What is this regarding?"
-                    required
-                  />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="phone" className="form-label">
+                      <Phone size={16} />
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="subject" className="form-label">
+                      <Building size={16} />
+                      Subject
+                    </label>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="What is this regarding?"
+                      required
+                    />
+                  </div>
                 </div>
                 
                 <div className="form-group">
@@ -243,9 +286,9 @@ const ContactUs = () => {
                   ></textarea>
                 </div>
                 
-                <button type="submit" className="submit-button">
+                <button type="submit" className="submit-button" disabled={isSubmitting}>
                   <Send size={20} />
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             )}
