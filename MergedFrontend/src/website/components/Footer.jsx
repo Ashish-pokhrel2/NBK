@@ -36,7 +36,7 @@ export default function Footer() {
             <p className="font-bold text-base mb-2">NBK RESOURCES</p>
             <a href="#" className="hover:underline">Home</a>
             <a href="#" className="hover:underline">Courses</a>
-            <a href="#" className="hover:underline">Department</a>
+            <a href="#" className="hover:underline">Our Faculty</a>
             <a href="#" className="hover:underline">About Us</a>
             <a href="#" className="hover:underline">Gallery</a>
             <a href="#" className="hover:underline">Notification</a>

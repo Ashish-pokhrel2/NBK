@@ -4,7 +4,7 @@ const Navbar = () => {
   const links = [
     { label: "Home", path: "/" },
     { label: "Courses", path: "/courses" },
-    { label: "Department", path: "/department" },
+    { label: "Our Faculty", path: "/faculty" },
     { label: "About us", path: "/about" },
     { label: "Gallery", path: "/gallery" },
     { label: "Notification", path: "/notification" },

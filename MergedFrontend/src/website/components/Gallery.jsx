@@ -35,148 +35,7 @@ useEffect(() => {
 
   const categories = ['all', 'nature', 'architecture', 'people', 'abstract', 'urban'];
 
-  // const gridItems = [
-  //   { 
-  //     id: 1, 
-  //     type: 'large', 
-  //     url: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Mountain Landscape',
-  //     photographer: 'John Doe',
-  //     category: 'nature',
-  //     dimensions: '1920x1080',
-  //     size: '2.4 MB'
-  //   },
-  //   { 
-  //     id: 2, 
-  //     type: 'medium',
-  //     url: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'City Architecture',
-  //     photographer: 'Jane Smith',
-  //     category: 'architecture',
-  //     dimensions: '1920x1080',
-  //     size: '1.8 MB'
-  //   },
-  //   { 
-  //     id: 3, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Portrait Study',
-  //     photographer: 'Mike Johnson',
-  //     category: 'people',
-  //     dimensions: '1080x1350',
-  //     size: '1.2 MB'
-  //   },
-  //   { 
-  //     id: 4, 
-  //     type: 'tall',
-  //     url: 'https://images.pexels.com/photos/1563356/pexels-photo-1563356.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop',
-  //     title: 'Abstract Colors',
-  //     photographer: 'Sarah Wilson',
-  //     category: 'abstract',
-  //     dimensions: '1080x1920',
-  //     size: '2.1 MB'
-  //   },
-  //   { 
-  //     id: 5, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Ocean Waves',
-  //     photographer: 'David Brown',
-  //     category: 'nature',
-  //     dimensions: '1920x1080',
-  //     size: '3.2 MB'
-  //   },
-  //   { 
-  //     id: 6, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1308881/pexels-photo-1308881.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Urban Street',
-  //     photographer: 'Lisa Garcia',
-  //     category: 'urban',
-  //     dimensions: '1920x1080',
-  //     size: '1.9 MB'
-  //   },
-  //   { 
-  //     id: 7, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Forest Path',
-  //     photographer: 'Tom Anderson',
-  //     category: 'nature',
-  //     dimensions: '1920x1080',
-  //     size: '2.7 MB'
-  //   },
-  //   { 
-  //     id: 8, 
-  //     type: 'large',
-  //     url: 'https://images.pexels.com/photos/1486974/pexels-photo-1486974.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Modern Building',
-  //     photographer: 'Emma Davis',
-  //     category: 'architecture',
-  //     dimensions: '1920x1080',
-  //     size: '2.0 MB'
-  //   },
-  //   { 
-  //     id: 9, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1212487/pexels-photo-1212487.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Sunset Portrait',
-  //     photographer: 'Chris Lee',
-  //     category: 'people',
-  //     dimensions: '1080x1350',
-  //     size: '1.5 MB'
-  //   },
-  //   { 
-  //     id: 10, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Geometric Patterns',
-  //     photographer: 'Alex Turner',
-  //     category: 'abstract',
-  //     dimensions: '1920x1080',
-  //     size: '1.7 MB'
-  //   },
-  //   { 
-  //     id: 11, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'City Lights',
-  //     photographer: 'Maria Rodriguez',
-  //     category: 'urban',
-  //     dimensions: '1920x1080',
-  //     size: '2.3 MB'
-  //   },
-  //   { 
-  //     id: 12, 
-  //     type: 'tall',
-  //     url: 'https://images.pexels.com/photos/1761279/pexels-photo-1761279.jpeg?auto=compress&cs=tinysrgb&w=800&h=1200&fit=crop',
-  //     title: 'Waterfall',
-  //     photographer: 'Kevin White',
-  //     category: 'nature',
-  //     dimensions: '1080x1920',
-  //     size: '3.5 MB'
-  //   },
-  //   { 
-  //     id: 13, 
-  //     type: 'small',
-  //     url: 'https://images.pexels.com/photos/1438761/pexels-photo-1438761.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Glass Reflection',
-  //     photographer: 'Nina Taylor',
-  //     category: 'architecture',
-  //     dimensions: '1920x1080',
-  //     size: '1.6 MB'
-  //   },
-  //   { 
-  //     id: 14, 
-  //     type: 'medium',
-  //     url: 'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-  //     title: 'Creative Portrait',
-  //     photographer: 'Ryan Clark',
-  //     category: 'people',
-  //     dimensions: '1920x1080',
-  //     size: '2.2 MB'
-  //   }
-  // ];
+
 
   const filteredItems = galleryList.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -256,8 +115,8 @@ useEffect(() => {
       <div className="bg-gradient-to-br from-red-50 via-white to-blue-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent mb-4">
-              Stunning Photography Collection
+            <h1 className="text-4xl h-20 md:text-6xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent mb-4">
+              Our gallery
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Discover breathtaking images from talented photographers around the world. 
@@ -280,39 +139,10 @@ useEffect(() => {
               </div>
               
               <div className="flex items-center gap-4">
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 cursor-pointer"
-                >
-                  {categories.map(category => (
-                    <option key={category} value={category}>
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </option>
-                  ))}
-                </select>
+                
                 
                 <div className="flex bg-gray-100 rounded-xl p-1">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-lg transition-all duration-200 cursor-pointer ${
-                      viewMode === 'grid' 
-                        ? 'bg-white shadow-sm text-blue-600' 
-                        : 'text-gray-600 hover:text-blue-600'
-                    }`}
-                  >
-                    <Grid size={20} />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-lg transition-all duration-200 cursor-pointer ${
-                      viewMode === 'list' 
-                        ? 'bg-white shadow-sm text-blue-600' 
-                        : 'text-gray-600 hover:text-blue-600'
-                    }`}
-                  >
-                    <List size={20} />
-                  </button>
+                  
                 </div>
               </div>
             </div>

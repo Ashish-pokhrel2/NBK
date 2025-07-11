@@ -1,6 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import StudentAuthProvider from "./context/StudentAuthContext";
 
 // Admin Panel Components
@@ -18,12 +17,12 @@ import Logout from "./admin/pages/Logout";
 import Home from "./website/components/Home";
 import CoursesPage from "./website/components/Courses";
 import Gallery from "./website/components/Gallery";
-import Department from "./website/components/Department";
 import Contact from "./website/components/ContactUs";
 import About from "./website/components/AboutPage";
 import Notification from "./website/components/Notification";
 import StudentLogin from "./website/components/StudentLogin";
 import StudentProtectedRoute from "./website/components/StudentProtectedRoute";
+import OurFaculty from "./website/components/OurFaculty";
 
 function App() {
   return (
@@ -45,9 +44,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/gallery" element={<Gallery />} />
-          <Route path="/department" element={<Department />} />
+          <Route path="/department" element={<Navigate to="/faculty" replace />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/faculty" element={<OurFaculty />} />
           <Route path="/student-login" element={<StudentLogin />} />
           <Route path="/notification" element={<StudentProtectedRoute><Notification /></StudentProtectedRoute>} />
         </Routes>

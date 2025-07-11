@@ -384,7 +384,7 @@ function Courses() {
                   </div>
                 </div>
                 <div className="card-footer">
-                  <span className="course-fee">{course.fees}</span>
+                  
                   <div className="learn-more">
                     <span>Explore Course</span>
                     <ChevronRight size={16} />
